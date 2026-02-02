@@ -11,8 +11,7 @@ public partial class JumpListService
     [LifecycleStart]
     private static void _Start()
     {
-        var app = Application.Current;
-        if (app is null) return;
+        var app = Lifecycle.CurrentApplication;
         var jumpList = new JumpList();
         jumpList.JumpItems.Add(new JumpTask
         {
@@ -29,7 +28,7 @@ public partial class JumpListService
         }
         else
         {
-            app.Dispatcher.Invoke(() => JumpList.SetJumpList(app, jumpList), DispatcherPriority.Normal);
+            app.Dispatcher.BeginInvoke(() => JumpList.SetJumpList(app, jumpList), DispatcherPriority.Normal);
         }
     }
 }
