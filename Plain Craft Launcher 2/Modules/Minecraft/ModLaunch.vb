@@ -300,15 +300,6 @@ NextInner:
                             "考虑一下正版？", "支持正版游戏！", "下次一定") = 1 Then
                     OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj")
                 End If
-            Else
-                Select Case MyMsgBox("你必须先登录正版账号才能启动游戏！", "正版验证", "购买正版", "试玩", "返回",
-                                     Button1Action:=Sub() OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj"))
-                    Case 2
-                        Hint("游戏将以试玩模式启动！", HintType.Critical)
-                        CurrentLaunchOptions.ExtraArgs.Add("--demo")
-                    Case 3
-                        Throw New Exception("$$")
-                End Select
             End If
         End If
     End Sub

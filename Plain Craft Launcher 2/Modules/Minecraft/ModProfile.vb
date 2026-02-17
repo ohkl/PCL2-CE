@@ -235,38 +235,23 @@ Public Module ModProfile
     Public Sub CreateProfile()
         Dim selectedAuthTypeNum As Integer? = Nothing '验证类型序号
         RunInUiWait(Sub()
-                        Dim authTypeList As List(Of IMyRadio)
-                        Dim HasMinecraftAccount = ProfileList.Any(Function(x) x.Type = McLoginType.Ms)
-                        Dim Restricted = RegionUtils.IsRestrictedFeatAllowed AndAlso ProfileList.Count > 0
-                        Dim HasNetwork = NetworkHelper.IsNetworkAvailable()
-                        If HasMinecraftAccount OrElse Restricted OrElse Not HasNetwork Then
-                            authTypeList = New List(Of IMyRadio) From
-                            {
-                                New MyListItem With {
-                                    .Title = "正版验证",
-                                    .Type = MyListItem.CheckType.RadioBox,
-                                    .Logo = Logo.IconButtonAuth
-                                }, New MyListItem With {
-                                    .Title = "第三方验证",
-                                    .Type = MyListItem.CheckType.RadioBox,
-                                    .Logo = Logo.IconButtonThirdparty
-                                },
-                                New MyListItem With {
-                                    .Title = "离线验证",
-                                    .Type = MyListItem.CheckType.RadioBox,
-                                    .Logo = Logo.IconButtonOffline
-                                }
+                        Dim authTypeList As New List(Of IMyRadio) From
+                        {
+                            New MyListItem With {
+                                .Title = "正版验证",
+                                .Type = MyListItem.CheckType.RadioBox,
+                                .Logo = Logo.IconButtonAuth
+                            }, New MyListItem With {
+                                .Title = "第三方验证",
+                                .Type = MyListItem.CheckType.RadioBox,
+                                .Logo = Logo.IconButtonThirdparty
+                            },
+                            New MyListItem With {
+                                .Title = "离线验证",
+                                .Type = MyListItem.CheckType.RadioBox,
+                                .Logo = Logo.IconButtonOffline
                             }
-                        Else
-                            authTypeList = New List(Of IMyRadio) From
-                            {
-                                New MyListItem With {
-                                    .Title = "正版验证",
-                                    .Type = MyListItem.CheckType.RadioBox,
-                                    .Logo = Logo.IconButtonAuth
-                                }
-                            }
-                        End If
+                        }
                         selectedAuthTypeNum = MyMsgBoxSelect(authTypeList, "新建档案 - 选择验证类型", "继续", "取消")
                     End Sub)
         If selectedAuthTypeNum Is Nothing Then Exit Sub
