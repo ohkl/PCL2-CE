@@ -293,15 +293,15 @@ NextInner:
             End Sub, "Donate")
         End If
 #End If
-        '正版购买提示
-        If Not ProfileList.Any(Function(x) x.Type = McLoginType.Ms) Then
-            If RegionUtils.IsRestrictedFeatAllowed Then
-                If MyMsgBox($"看起来你似乎没买正版...{vbCrLf}如果觉得 Minecraft 还不错，可以购买正版支持一下，毕竟开发游戏也真的很不容易...不要一直白嫖啦。{vbCrLf}{vbCrLf}在验证一个正版账号之后，就不会出现这个提示了！", 
-                            "考虑一下正版？", "支持正版游戏！", "下次一定") = 1 Then
-                    OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj")
-                End If
-            End If
-        End If
+        '正版购买提示 (已禁用 - 允许用户直接使用离线登录)
+        'If Not ProfileList.Any(Function(x) x.Type = McLoginType.Ms) Then
+        '    If RegionUtils.IsRestrictedFeatAllowed Then
+        '        If MyMsgBox($"看起来你似乎没买正版...{vbCrLf}如果觉得 Minecraft 还不错，可以购买正版支持一下，毕竟开发游戏也真的很不容易...不要一直白嫖啦。{vbCrLf}{vbCrLf}在验证一个正版账号之后，就不会出现这个提示了！", 
+        '                        "考虑一下正版？", "支持正版游戏！", "下次一定") = 1 Then
+        '            OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj")
+        '        End If
+        '    End If
+        'End If
     End Sub
 
 #End Region
