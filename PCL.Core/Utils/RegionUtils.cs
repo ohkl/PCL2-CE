@@ -7,9 +7,7 @@ namespace PCL.Core.Utils;
 public static class RegionUtils
 {
     /// <summary>
-    /// 获取区域限制状态
+    /// 获取区域限制状态。社区版已移除地域限制，始终返回 true
     /// </summary>
-    public static bool IsRestrictedFeatAllowed =>
-        Config.Debug.AllowRestrictedFeature || (TimeZoneInfo.Local.Id == "China Standard Time" &&
-                                                       (CultureInfo.CurrentCulture.Name == "zh-CN" || CultureInfo.CurrentUICulture.Name == "zh-CN"));
+    public static bool IsRestrictedFeatAllowed => true;
 }
