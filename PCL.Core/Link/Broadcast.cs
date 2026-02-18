@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using PCL.Core.Net;
+using PCL.Core.Utils.Exts;
 
 namespace PCL.Core.Link;
 
@@ -22,7 +23,7 @@ public class Broadcast(string description, int localPort) : IDisposable
         _isRunning = true;
 
         // 启动 UDP 广播任务
-        _ = Task.Run(() => _RunUdpBroadcastAsync(_cts.Token), _cts.Token);
+        Task.Run(() => _RunUdpBroadcastAsync(_cts.Token), _cts.Token).Forget();
 
         Console.WriteLine($"开始向本地 Minecraft 客户端广播，端口: {localPort}");
     }

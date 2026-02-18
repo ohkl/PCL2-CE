@@ -5,6 +5,7 @@ using PCL.Core.Link.Scaffolding.Client.Models;
 using PCL.Core.Link.Scaffolding.EasyTier;
 using PCL.Core.Logging;
 using PCL.Core.Utils;
+using PCL.Core.Utils.Exts;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -106,7 +107,7 @@ public class LobbyService() : GeneralService("lobby", "LobbyService")
     /// <inheritdoc />
     public override void Stop()
     {
-        _ = _LobbyController.CloseAsync();
+        _LobbyController.CloseAsync().Forget();
         _ServerGameWatcher.Dispose();
         _lobbyCts.Dispose();
 
@@ -166,7 +167,7 @@ public class LobbyService() : GeneralService("lobby", "LobbyService")
             _SetState(LobbyState.Initialized);
             LogWrapper.Info("LobbyService", "Lobby service initialized successfully.");
 
-            _ = DiscoverWorldAsync();
+            DiscoverWorldAsync().Forget();
         }
         catch (Exception ex)
         {
@@ -313,7 +314,7 @@ public class LobbyService() : GeneralService("lobby", "LobbyService")
 
     private static void _ServerOnPlayerPing(IReadOnlyList<PlayerProfile> players)
     {
-        _ = _RunInUiAsync(() =>
+        _RunInUiAsync(() =>
         {
             var currentMachineIds = new HashSet<string>(Players.Select(p => p.MachineId));
             var newMachineIds = new HashSet<string>(players.Select(p => p.MachineId));
@@ -347,7 +348,7 @@ public class LobbyService() : GeneralService("lobby", "LobbyService")
                     Players.Add(player);
                 }
             }
-        });
+        }).Forget();
     }
 
     /// <summary>
@@ -405,12 +406,12 @@ public class LobbyService() : GeneralService("lobby", "LobbyService")
     {
         OnServerShutDown?.Invoke();
 
-        _ = LeaveLobbyAsync();
+        LeaveLobbyAsync().Forget();
     }
 
     private static void _ClientOnHeartbeat(IReadOnlyList<PlayerProfile> players, long latency)
     {
-        _ = _RunInUiAsync(() =>
+        _RunInUiAsync(() =>
         {
             var currentMachineIds = new HashSet<string>(Players.Select(p => p.MachineId));
             var newMachineIds = new HashSet<string>(players.Select(p => p.MachineId));
@@ -445,7 +446,7 @@ public class LobbyService() : GeneralService("lobby", "LobbyService")
             }
 
             OnClientPing?.Invoke(latency);
-        });
+        }).Forget();
     }
 
 
@@ -486,7 +487,7 @@ public class LobbyService() : GeneralService("lobby", "LobbyService")
             _isGameWatcherRunnable = false;
 
             _discoveringCts = new CancellationTokenSource();
-            _ = DiscoverWorldAsync();
+            DiscoverWorldAsync().Forget();
         }
         catch (Exception ex)
         {

@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using PCL.Core.Logging;
+using PCL.Core.Utils.Exts;
 
 namespace PCL.Core.Net;
 public sealed class TcpForward(
@@ -51,7 +52,7 @@ public sealed class TcpForward(
             LocalPort = endPoint.Port;
 
             // 启动 TCP 接受连接任务
-            _ = Task.Run(() => _AcceptConnectionsAsync(_cts.Token), _cts.Token);
+            Task.Run(() => _AcceptConnectionsAsync(_cts.Token), _cts.Token).Forget();
 
             LogWrapper.Info("TcpForward", $"MC 端口转发已启动，监听 {listenAddress}:{LocalPort}，目标 {targetAddress}:{targetPort}");
         }
@@ -108,8 +109,8 @@ public sealed class TcpForward(
                 await _connectionSemaphore.WaitAsync(cancellationToken);
 
                 // 异步处理连接，不等待完成
-                _ = Task.Run(() => _HandleConnectionAsync(clientSocket, cancellationToken), cancellationToken)
-                    .ContinueWith(_ => _connectionSemaphore.Release(), TaskScheduler.Default);
+                Task.Run(() => _HandleConnectionAsync(clientSocket, cancellationToken), cancellationToken)
+                    .ContinueWith(_ => _connectionSemaphore.Release(), TaskScheduler.Default).Forget();
             }
             catch (OperationCanceledException)
             {

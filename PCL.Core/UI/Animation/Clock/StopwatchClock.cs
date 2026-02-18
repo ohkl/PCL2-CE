@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using PCL.Core.UI.Animation.Core;
 using PCL.Core.Utils;
+using PCL.Core.Utils.Exts;
 
 namespace PCL.Core.UI.Animation.Clock;
 
@@ -35,7 +36,7 @@ public class StopwatchClock(int fps = 60) : IClock, IDisposable
 
         _cts = new CancellationTokenSource();
         
-        _ = Task.Run(() =>
+        Task.Run(() =>
         {
             _lastStamp = FrameUtils.NowStamp();
             
@@ -55,7 +56,7 @@ public class StopwatchClock(int fps = 60) : IClock, IDisposable
                     Tick?.Invoke(this, frame);
                 }
             }
-        }, _cts.Token);
+        }, _cts.Token).Forget();
     }
     
     public void Stop()

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using PCL.Core.UI.Animation.Animatable;
 using PCL.Core.UI.Animation.Easings;
 using PCL.Core.UI.Animation.ValueProcessor;
+using PCL.Core.Utils.Exts;
 
 namespace PCL.Core.UI.Animation.Core;
 
@@ -49,14 +50,14 @@ public class FromToAnimationBase<T> : AnimationBase, IFromToAnimation where T : 
     {
         _RunCore(target);
 
-        _ = Task.Run(async () =>
+        Task.Run(async () =>
         {
             // 延迟
             await Task.Delay(Delay);
 
             // 将该动画推送到动画服务
             AnimationService.PushAnimationFireAndForget((FromToAnimationBase<T>)MemberwiseClone(), target);
-        });
+        }).Forget();
     }
 
     private void _RunCore(IAnimatable target)

@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using PCL.Core.Utils.Exts;
 
 namespace PCL.Core.Net.Http.Server;
 
@@ -86,7 +87,7 @@ public abstract class HttpServer : IDisposable
             try
             {
                 var context = await _server.GetContextAsync();
-                _ = Task.Run(async () => await _processRequest(context), cancellationToken);
+                Task.Run(async () => await _processRequest(context), cancellationToken).Forget();
             }
             catch (OperationCanceledException) { break; } // Cancellation
             catch (ObjectDisposedException) { break; } // Disposed
