@@ -697,6 +697,7 @@ Retry:
         Try
             Using response = HttpRequestBuilder.Create("https://user.auth.xboxlive.com/user/authenticate", HttpMethod.Post).
                 WithJsonContent(requestData).
+                WithDefaultHeaderOption(False).
                 SendAsync(True).GetAwaiter().GetResult()
                 Result = response.AsStringContent()
             End Using
@@ -745,6 +746,7 @@ Retry:
         Dim result As String
         Using response = HttpRequestBuilder.Create("https://xsts.auth.xboxlive.com/xsts/authorize", HttpMethod.Post).
                 WithJsonContent(requestData).
+                WithDefaultHeaderOption(False).
                 SendAsync().GetAwaiter().GetResult()
             result = response.AsStringContent()
 
@@ -809,6 +811,7 @@ Retry:
         Try
             Using response = HttpRequestBuilder.Create("https://api.minecraftservices.com/authentication/login_with_xbox", HttpMethod.Post).
                 WithJsonContent(requestData).
+                WithDefaultHeaderOption(False).
                 SendAsync(True).GetAwaiter().GetResult()
                 Result = response.AsStringContent()
             End Using
@@ -851,6 +854,7 @@ Retry:
         Try
             Using response = HttpRequestBuilder.Create("https://api.minecraftservices.com/entitlements/mcstore", HttpMethod.Get).
                 WithBearerToken(accessToken).
+                WithDefaultHeaderOption(False).
                 SendAsync(True).GetAwaiter().GetResult()
                 result = response.AsStringContent()
             End Using
@@ -883,6 +887,7 @@ Retry:
         Try
             Using response = HttpRequestBuilder.Create("https://api.minecraftservices.com/minecraft/profile", HttpMethod.Get).
                     WithBearerToken(AccessToken).
+                    WithDefaultHeaderOption(False).
                     SendAsync(True).GetAwaiter().GetResult()
                 Result = response.AsStringContent()
             End Using
