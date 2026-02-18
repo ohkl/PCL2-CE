@@ -8,6 +8,7 @@ using PCL.Core.UI.Animation.Animatable;
 using PCL.Core.UI.Animation.Clock;
 using PCL.Core.UI.Animation.UIAccessProvider;
 using PCL.Core.UI.Animation.ValueProcessor;
+using PCL.Core.Utils.Exts;
 using PCL.Core.Utils.Threading;
 
 namespace PCL.Core.UI.Animation.Core;
@@ -76,7 +77,7 @@ public sealed class AnimationService : GeneralService
         
         // 初始化 UI 线程访问提供器并启动赋值 Task
         UIAccessProvider = new WpfUIAccessProvider(Lifecycle.CurrentApplication.Dispatcher);
-        _ = UIAccessProvider.InvokeAsync(async () =>
+        UIAccessProvider.InvokeAsync(async () =>
         {
             if (_cts.IsCancellationRequested) return;
             
@@ -90,7 +91,7 @@ public sealed class AnimationService : GeneralService
         
                 await Task.Yield();
             }
-        });
+        }).Forget();
 
         // 初始化 Clock 并注册 Tick 事件
         _clock = new WinMMClock(Fps);
@@ -100,7 +101,7 @@ public sealed class AnimationService : GeneralService
         // 运行动画计算 Task
         for (var i = 0; i < _taskCount; i++)
         {
-            _ = Task.Run(_AnimationComputeTaskAsync);
+            Task.Run(_AnimationComputeTaskAsync).Forget();
         }
     }
 

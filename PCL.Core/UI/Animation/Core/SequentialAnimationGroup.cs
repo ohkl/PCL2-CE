@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using PCL.Core.UI.Animation.Animatable;
+using PCL.Core.Utils.Exts;
 
 namespace PCL.Core.UI.Animation.Core;
 
@@ -20,6 +21,6 @@ public sealed class SequentialAnimationGroup : AnimationGroup
     public override void RunFireAndForget(IAnimatable target)
     {
         // 由于顺序执行的特性，这里直接调用异步方法并且不等待其完成，无法享受 FireAndForget 的好处。
-        _ = RunAsync(target);
+        RunAsync(target).Forget();
     }
 }

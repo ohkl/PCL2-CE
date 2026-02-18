@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using PCL.Core.Logging;
 
 namespace PCL.Core.Utils.Exts;
 public static class TaskExtensions
@@ -62,7 +63,14 @@ public static class TaskExtensions
         /// </summary>
         public void Forget()
         {
-            _ = task.ContinueWith(t => _ = t.Exception, TaskContinuationOptions.OnlyOnFaulted);
+            _ = task.ContinueWith(t =>
+            {
+                if (t.IsFaulted && t.Exception != null)
+                {
+                    // Log the exception to prevent silent failures
+                    LogWrapper.Error(t.Exception.GetBaseException(), "TaskExtension", "Unhandled exception in fire-and-forget task");
+                }
+            }, TaskContinuationOptions.OnlyOnFaulted);
         }
     }
 }

@@ -2,6 +2,7 @@ using PCL.Core.Link.Scaffolding.Client.Models;
 using PCL.Core.Link.Scaffolding.Server.Abstractions;
 using PCL.Core.Link.Scaffolding.Server.Handlers;
 using PCL.Core.Logging;
+using PCL.Core.Utils.Exts;
 using System;
 using System.Buffers;
 using System.Buffers.Binary;
@@ -161,7 +162,7 @@ public sealed class ScaffoldingServer : IAsyncDisposable
             {
                 var tcpClient = await _listener.AcceptTcpClientAsync(ct).ConfigureAwait(false);
                 LogWrapper.Debug("ScaffoldingServer", $"Client connected: {tcpClient.Client.RemoteEndPoint}");
-                _ = _HandleClientAsync(tcpClient, ct);
+                _HandleClientAsync(tcpClient, ct).Forget();
             }
             catch (OperationCanceledException)
             {
