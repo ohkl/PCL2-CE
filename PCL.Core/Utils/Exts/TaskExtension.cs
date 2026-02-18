@@ -65,7 +65,7 @@ public static class TaskExtensions
         {
             _ = task.ContinueWith(t =>
             {
-                if (t.IsFaulted && t.Exception != null)
+                if (t.Exception != null)
                 {
                     // Log the exception to prevent silent failures
                     LogWrapper.Error(t.Exception.GetBaseException(), "TaskExtension", "Unhandled exception in fire-and-forget task");
